@@ -11,10 +11,10 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 
-require_once("../models/quizC.php");
-$question = new quizz($con);
 require_once("../models/reponse.php");
-$reponse = new response($con);
+$reponse = new Reponse($con);
 
+
+ 
 
 ?>

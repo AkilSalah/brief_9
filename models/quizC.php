@@ -1,66 +1,51 @@
 <?php
-class quizz {
+class Question {
     private $db;
-    private $idQuestion;
-    private $question ;
-    private $idTheme;
-    private $idReponse;
+    private $id_question;
 
-    public function __construct($con){
-        $this->db = $con;
+    public function __construct($db) {
+        $this->db = $db;
     }
 
-    public function getIdQuestion() {
-        return $this->idQuestion;
+    public function getId_question() {
+        return $this->id_question;
     }
-    public function setIdQuestion($idQuestion) {
-        $this->idQuestion = $idQuestion;
+
+    public function setId_question($id_question) {
+        $this->id_question = $id_question;
     }
-    public function getQuestion() {
-        return $this->question;
-    }
-    public function setQuestion($question) {
-        $this->question = $question;
-    }
-    public function getIdTheme() {
-        return $this->idTheme;
-    }
-    public function setIdTheme($idTheme) {
-        $this->idTheme = $idTheme;
-    }
-    public function getIdReponse() {
-        return $this->idReponse;
-    }
-    public function setIdReponse($idReponse) {
-        $this->idReponse = $idReponse;
-    }
-    
-    public function selectQuestion(){
-        $sqlQuestion = "SELECT * FROM questions ORDER BY RAND() LIMIT 1";
+
+    public function selectQuestions() {
+        $sqlQuestion = "SELECT * FROM questions ORDER BY RAND()";
         $queryQuestion = $this->db->prepare($sqlQuestion);
         $queryQuestion->execute();
-        $question = $queryQuestion->fetch();
-        return $question;
+        $questions = $queryQuestion->fetchAll(PDO::FETCH_ASSOC);
+
+        $formattedQuestions = [];
+        foreach ($questions as $question) {
+            $reponse = new Reponse($this->db);
+            $reponse->setId_question($question['id_question']);
+            
+            $formattedQuestion = [
+                'question_text' => $question['question'],
+                'reponses' => $reponse->selectResponse()
+            ];
+            $formattedQuestions[] = $formattedQuestion;
+        }
+
+        return $formattedQuestions;
     }
 
-
-
+    public function getQuestionsAsJSON() {
+        $formattedQuestions = $this->selectQuestions();
+        return json_encode($formattedQuestions);
+    }
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+require ('../config/db.php');
+$question = new Question($con);
+echo $question->getQuestionsAsJSON();
 
 
 

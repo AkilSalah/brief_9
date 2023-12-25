@@ -1,81 +1,67 @@
-<?php 
-class response{
+<?php
+class Reponse {
     private $db;
-    private $response;
-    private $idReponse;
-    private $idQuestion;
+    private $id_question;
 
-    public function __construct($con){
-        $this->db = $con;
+    public function __construct($db) {
+        $this->db = $db;
     }
 
-    public function getResponse() {
-        return $this->response;
-    }
-    public function setResponse($response) {
-        $this->response = $response;
-    }
-    public function getIdReponse() {
-        return $this->idReponse;
-    }
-    public function setIdReponse($idReponse) {
-        $this->idReponse = $idReponse;
-    }
-    public function getIdQuestion() {
-        return $this->idQuestion;
-    }
-    public function setIdQuestion($idQuestion) {
-        $this->idQuestion = $idQuestion;
+    public function getId_question() {
+        return $this->id_question;
     }
     
-    public function selectResponse(){
-        $idQuestion=$this->getIdQuestion();
-        $sqlResponses = "SELECT * FROM reponses WHERE id_question = :id_question";
+
+    public function setId_question($id_question) {
+        $this->id_question = $id_question;
+    }
+    
+    public function selectResponse() {
+        $idQuestion = $this->getId_question();
+        $correctResponse = $this->correctResponse();
+        $sqlResponses = "SELECT reponse FROM reponses WHERE id_question = :id_question";
         $queryResponses = $this->db->prepare($sqlResponses);
-        $queryResponses->bindParam(':id_question',$idQuestion );
+        $queryResponses->bindParam(':id_question', $idQuestion);
         $queryResponses->execute();
-        $responses = $queryResponses->fetchAll();
-        return $responses;
+        $responses = $queryResponses->fetchAll(PDO::FETCH_ASSOC);
+
+        $formattedResponses = [];
+        foreach ($responses as $response) {
+            $formattedResponses[] = [
+                'reponse' => $response['reponse'],
+                'correct' => $response['reponse'] == $correctResponse,
+            ];
+        }
+
+        return $formattedResponses;
     }
 
-    public function correctResponse(){
-        $sql = " SELECT * from questions join reponses on reponses.id_reponse = questions.id_reponse ";
-        $correctResponses = $this->db->prepare($sql);
-        $correctResponses->execute();
-        $correctResponses = $correctResponses->fetchAll();
-        return $correctResponses;
+    public function correctResponse() {
+        $idQuestion = $this->getId_question();
+        $sql = "SELECT reponse FROM questions JOIN reponses ON reponses.id_reponse = questions.id_reponse WHERE questions.id_question = :id_question";
+        $correctResponseQuery = $this->db->prepare($sql);
+        $correctResponseQuery->bindParam(':id_question', $idQuestion);
+        $correctResponseQuery->execute();
+    
+        $correctResponse = $correctResponseQuery->fetch(PDO::FETCH_ASSOC);
+    
+        if ($correctResponse) {
+            return $correctResponse['reponse'];
+        } else {
+            return null; 
+        }
     }
     
-
-
-
-
-
-
-
-
-
-
-
 }
 
+// require_once("../config/db.php");
 
+// $id_question = 2;
 
+// $reponse = new Reponse($con);
+// $reponse->setId_question($id_question);
 
+// $formattedResponses = $reponse->selectResponse();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// var_dump($formattedResponses);
 ?>

@@ -30,12 +30,13 @@ if (isset($_POST['submit'])) {
                         <input type="text" name="nom" placeholder="Veuillez saisie votre Nom" required>
                     </div>
                     <div class="button">
-                     <a href=""><input type="submit" name="submit" value="Commencer"></a> 
+                     <a href=""><input type="submit" id="commencer" name="submit" value="Commencer"></a> 
                     </div>
                     
                 </form>
             </div>
         </div>
     </section>
+
 </body>
 </html>
