@@ -20,14 +20,19 @@ if (isset($_POST['submit'])) {
     <title>Bienvenue</title>
 </head>
 <body>
+<video autoplay muted loop id="myVideo">
+        <source src="../assets/images/700_F_208412274_B2m3HznMo5uPYQulaweAwCXi3uFSnobo_ST.mp4" type="video/mp4">
+        </video>
     
 <section>
         <div class="form-box">
             <div class="form-value">
             <form action="nickname.php" method="post">
-                    <h2>AKIL'S QuiZ</h2>
+                <div class="logo">
+                    <img src="../assets/images/aws-logo.png"  >
+                </div>
                     <div class="inputbox">
-                        <input type="text" name="nom" placeholder="Veuillez saisie votre Nom" required>
+                        <input type="text" name="nom" placeholder="Your Nickname" required>
                     </div>
                     <div class="button">
                      <a href=""><input type="submit" id="commencer" name="submit" value="Commencer"></a> 

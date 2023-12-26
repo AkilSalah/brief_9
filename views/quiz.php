@@ -3,11 +3,13 @@ session_start();
 include("../config/db.php");
 
 // // Récupérer les questions une fois
-// $question->selectQuestions();
-// $quiz = $question->getQuestionsAsJSON();
 
+// $question->selectQuestions();
+
+// $quiz = $question->getQuestion
 // // Décoder le JSON pour obtenir un tableau associatif
 // $questions = json_decode($quiz, true);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,14 +21,15 @@ include("../config/db.php");
     <link rel='stylesheet' type='text/css' media='screen' href='../assets/css/quiz.css'>
 </head>
 <body>
-    <div class="app">
-        <h1 class="bienvenue">Bienvenue, <?php echo $_SESSION['NickName']; ?>, à Akil's Quiz !</h1>
-        <div class="quiz">
-            <h2 id="question"></h2>
-            <div id="answer-buttons"></div>
-            <button id="next-btn" onclick="handleNextButton()">Next</button>
-        </div>
-    </div>
+        <div class="app">
+                <h1 class="bienvenue">Bienvenue, <?php echo $_SESSION['NickName']; ?>, à AWS Quiz !</h1>
+                <div class="quiz">
+                    <h2 id="question"></h2>
+                    <div id="answer-buttons"></div>
+                    <button id="next-btn">Next</button>
+                </div>
+            </div>
+        </video>
     <script>
         const questionElement = document.getElementById("question");
         const answerButton = document.getElementById("answer-buttons");
@@ -45,30 +48,37 @@ include("../config/db.php");
                     showQuestion();
                 }
             };
-
+                    
             xml.open("GET", "../models/quizC.php", true);
             xml.send();
         }
 
         function showQuestion() {
-            resetState();
-            let currentQuestion = array[currentQuestionIndex];
-            let questionNo = currentQuestionIndex + 1;
-            questionElement.innerHTML = questionNo + ". " + currentQuestion.question_text;
+          resetState();
+          let currentQuestion = array[currentQuestionIndex];
+          let questionNo = currentQuestionIndex + 1;
+          questionElement.innerHTML = questionNo + ". " + currentQuestion.question_text;
 
-            currentQuestion.reponses.forEach(reponse => {
-                const button = document.createElement("button");
-                button.innerText = reponse.reponse;
-                button.classList.add("btn");
-                answerButton.appendChild(button);
+          // Supprimer tous les écouteurs d'événements existants
+          Array.from(answerButton.children).forEach(button => {
+              button.removeEventListener("click", selectReponse);
+          });
 
-                if (reponse.correct) {
-                    button.dataset.correct = 'true';
-                }
+          currentQuestion.reponses.forEach(reponse => {
+              const button = document.createElement("button");
+              button.innerText = reponse.reponse;
+              button.classList.add("btn");
+              answerButton.appendChild(button);
 
-                button.addEventListener("click", selectReponse);
-            });
-        }
+              if (reponse.correct) {
+                  button.dataset.correct = 'true';
+              }
+
+              button.addEventListener("click", selectReponse);
+          });
+
+          console.log("Current Question:", currentQuestion);
+      }
 
         function resetState() {
             nextButton.style.display = 'none';
@@ -120,6 +130,8 @@ include("../config/db.php");
             } else {
                 startQuiz();
             }
+            console.log("Current Index:", currentQuestionIndex);
+
         });
 
         function startQuiz() {
