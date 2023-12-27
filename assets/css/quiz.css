@@ -110,3 +110,10 @@ body {
     background: #f00;
 }
 
+
+
+.question-div {
+    padding: 2rem 0.5rem;
+    border: 1px solid #222;
+    border-radius: 10px;
+}

@@ -38,6 +38,7 @@ class Question {
             $correction = new correction($this->db);
             $reponse->setId_question($question['id_question']);
             $theme->setId_question($question['id_question']);
+            $correction->setId_question($question['id_question']);
             $correction->setId_reponse($question['id_reponse']);
             $formattedQuestion = [
                 'question_text' => $question['question'],
@@ -60,8 +61,7 @@ class Question {
 
 require ('../config/db.php');
 $question = new Question($con);
+$question->setId_question(1);
+$question->setId_reponse(1);
 echo $question->getQuestionsAsJSON();
-
-
-
 ?>
