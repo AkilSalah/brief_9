@@ -44,12 +44,8 @@ class Reponse {
         $correctResponseQuery->execute();
     
         $correctResponse = $correctResponseQuery->fetch(PDO::FETCH_ASSOC);
-    
-        if ($correctResponse) {
             return $correctResponse['reponse'];
-        } else {
-            return null; 
-        }
+        
     }
     
 }

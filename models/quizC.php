@@ -3,10 +3,12 @@ class Question {
     private $db;
     private $id_question;
 
+    private $id_reponse;
+
     public function __construct($db) {
         $this->db = $db;
     }
-
+    
     public function getId_question() {
         return $this->id_question;
     }
@@ -14,6 +16,14 @@ class Question {
     public function setId_question($id_question) {
         $this->id_question = $id_question;
     }
+    public function  getId_reponse() {
+        return $this->id_reponse;
+    }
+    public function setId_reponse($id_reponse) {
+        return $this->id_reponse = $id_reponse;
+    }
+
+
 
     public function selectQuestions() {
         $sqlQuestion = "SELECT * FROM questions ORDER BY RAND()";
@@ -24,11 +34,16 @@ class Question {
         $formattedQuestions = [];
         foreach ($questions as $question) {
             $reponse = new Reponse($this->db);
+            $theme = new theme($this->db);
+            $correction = new correction($this->db);
             $reponse->setId_question($question['id_question']);
-            
+            $theme->setId_question($question['id_question']);
+            $correction->setId_reponse($question['id_reponse']);
             $formattedQuestion = [
                 'question_text' => $question['question'],
-                'reponses' => $reponse->selectResponse()
+                'reponses' => $reponse->selectResponse(),
+                'theme' => $theme->getTheme(),
+                'correction' => $correction->getCorrect()
             ];
             $formattedQuestions[] = $formattedQuestion;
         }

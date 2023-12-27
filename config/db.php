@@ -13,7 +13,10 @@ try {
 
 require_once("../models/reponse.php");
 $reponse = new Reponse($con);
-
+require_once("../models/theme.php");
+$theme = new theme($con);
+require_once("../models/correction.php");
+$correction = new correction($con);
 
  
 
